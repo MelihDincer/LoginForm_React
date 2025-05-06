@@ -4,15 +4,32 @@ export default function LoginState() {
   const initialValues = { email: "", password: "" };
   const [values, setValues] = useState(initialValues);
 
+  const [isEdited, setIsEdited] = useState({ email: false, password: false });
+  const emailIsInValid = isEdited.email && !values.email.includes("@");
+  const passwordIsInValid = isEdited.password && values.password.length < 5;
+
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(values);
+    setValues(initialValues);
   }
 
   function handleInputChange(e) {
     const name = e.target.name;
     const value = e.target.value;
     setValues({ ...values, [name]: value });
+
+    setIsEdited((prev) => ({
+      ...prev,
+      [name]: false,
+    }));
+  }
+
+  function handleInputBlur(e) {
+    const name = e.target.name;
+    setIsEdited((prev) => ({
+      ...prev,
+      [name]: true,
+    }));
   }
 
   return (
@@ -32,7 +49,13 @@ export default function LoginState() {
           name="email"
           value={values.email}
           onChange={handleInputChange}
+          onBlur={handleInputBlur}
         />
+        {emailIsInValid && (
+          <div className="invalid-feedback d-block">
+            Email formatı geçerli değildir.
+          </div>
+        )}
       </div>
       <div className="mb-4">
         <label htmlFor="password" className="form-label">
@@ -45,7 +68,13 @@ export default function LoginState() {
           name="password"
           value={values.password}
           onChange={handleInputChange}
+          onBlur={handleInputBlur}
         />
+        {passwordIsInValid && (
+          <div className="invalid-feedback d-block">
+            Parola 5 karakterden az olamaz.
+          </div>
+        )}
       </div>
       <div className="mb-3">
         <button className="btn btn-outline-warning me-2">Submit</button>
