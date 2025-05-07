@@ -1,36 +1,27 @@
-import { useState } from "react";
-import Input from "./input";
+import Input from "./Input";
+import useInput from "../hooks/useInput";
 
 export default function LoginState() {
-  const initialValues = { email: "", password: "" };
-  const [values, setValues] = useState(initialValues);
+  const {
+    value: emailValue,
+    handleInputChange: handleEmailChange,
+    handleInputBlur: handleEmailBlur,
+    isEdited: isEmailEdited,
+  } = useInput("");
 
-  const [isEdited, setIsEdited] = useState({ email: false, password: false });
-  const emailIsInValid = isEdited.email && !values.email.includes("@");
-  const passwordIsInValid = isEdited.password && values.password.length < 5;
+  const {
+    value: passwordValue,
+    handleInputChange: handlePasswordChange,
+    handleInputBlur: handlePasswordBlur,
+    isEdited: isPasswordEdited,
+  } = useInput("");
+
+  const emailIsInValid = isEmailEdited && !emailValue.includes("@");
+  const passwordIsInValid = isPasswordEdited && passwordValue.length < 5;
 
   function handleSubmit(e) {
     e.preventDefault();
-    setValues(initialValues);
-  }
-
-  function handleInputChange(e) {
-    const name = e.target.name;
-    const value = e.target.value;
-    setValues({ ...values, [name]: value });
-
-    setIsEdited((prev) => ({
-      ...prev,
-      [name]: false,
-    }));
-  }
-
-  function handleInputBlur(e) {
-    const name = e.target.name;
-    setIsEdited((prev) => ({
-      ...prev,
-      [name]: true,
-    }));
+    if (emailIsInValid || passwordIsInValid) return;
   }
 
   return (
@@ -45,9 +36,9 @@ export default function LoginState() {
         labelText="Email"
         id="email"
         error={emailIsInValid && "Enter email invalid"}
-        value={values.email}
-        onChange={handleInputChange}
-        onBlur={handleInputBlur}
+        value={emailValue}
+        onChange={handleEmailChange}
+        onBlur={handleEmailBlur}
       />
       <Input
         type="password"
@@ -55,9 +46,9 @@ export default function LoginState() {
         labelText="Password"
         id="password"
         error={passwordIsInValid && "Parola 5 karakterden az olamaz."}
-        value={values.password}
-        onChange={handleInputChange}
-        onBlur={handleInputBlur}
+        value={passwordValue}
+        onChange={handlePasswordChange}
+        onBlur={handlePasswordBlur}
       />
 
       <div className="mb-3">
