@@ -1,4 +1,8 @@
+import { useState } from "react";
+
 export default function Register() {
+  const [passwordNotEqual, setPasswordNotEqual] = useState(false);
+
   function handleSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -11,7 +15,13 @@ export default function Register() {
     const hobbies = formData.getAll("hobbies");
     const data = Object.fromEntries(formData.entries());
     data.hobbies = hobbies;
+
+    if (data.password !== data.repassword) {
+      setPasswordNotEqual(true);
+      return;
+    }
     console.log(data);
+    setPasswordNotEqual(false);
 
     e.target.reset();
   }
@@ -63,6 +73,13 @@ export default function Register() {
           />
         </div>
       </div>
+      {passwordNotEqual && (
+        <div className="row">
+          <div className="col-12 invalid-feedback d-block">
+            Parolalar eşleşmiyor.
+          </div>
+        </div>
+      )}
 
       <div className="mb-3">
         <label htmlFor="hobbies" className="form-label">

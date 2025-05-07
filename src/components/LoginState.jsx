@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Input from "./input";
 
 export default function LoginState() {
   const initialValues = { email: "", password: "" };
@@ -38,44 +39,27 @@ export default function LoginState() {
         <h1>Login</h1>
         <p>Please enter your login and password!</p>
       </div>
-      <div className="mb-3">
-        <label htmlFor="email" className="form-label">
-          Email
-        </label>
-        <input
-          type="email"
-          className="form-control"
-          id="email"
-          name="email"
-          value={values.email}
-          onChange={handleInputChange}
-          onBlur={handleInputBlur}
-        />
-        {emailIsInValid && (
-          <div className="invalid-feedback d-block">
-            Email formatı geçerli değildir.
-          </div>
-        )}
-      </div>
-      <div className="mb-4">
-        <label htmlFor="password" className="form-label">
-          Password
-        </label>
-        <input
-          type="password"
-          className="form-control"
-          id="password"
-          name="password"
-          value={values.password}
-          onChange={handleInputChange}
-          onBlur={handleInputBlur}
-        />
-        {passwordIsInValid && (
-          <div className="invalid-feedback d-block">
-            Parola 5 karakterden az olamaz.
-          </div>
-        )}
-      </div>
+      <Input
+        type="email"
+        name="email"
+        labelText="Email"
+        id="email"
+        error={emailIsInValid && "Enter email invalid"}
+        value={values.email}
+        onChange={handleInputChange}
+        onBlur={handleInputBlur}
+      />
+      <Input
+        type="password"
+        name="password"
+        labelText="Password"
+        id="password"
+        error={passwordIsInValid && "Parola 5 karakterden az olamaz."}
+        value={values.password}
+        onChange={handleInputChange}
+        onBlur={handleInputBlur}
+      />
+
       <div className="mb-3">
         <button className="btn btn-outline-warning me-2">Submit</button>
         <button className="btn btn-outline-light">Reset</button>
